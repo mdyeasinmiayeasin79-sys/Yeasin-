@@ -1,1 +1,338 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>দুই ধরনের কাজ</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#eef2f7;
+    padding:15px;
+}
+
+.container{
+    max-width:480px;
+    margin:auto;
+}
+
+.header{
+    background:linear-gradient(135deg,#0759c9,#1683ff);
+    color:white;
+    padding:22px 15px;
+    border-radius:18px;
+    text-align:center;
+    margin-bottom:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:24px;
+    margin-bottom:7px;
+}
+
+.header p{
+    font-size:14px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:18px;
+    margin-bottom:18px;
+    box-shadow:0 4px 14px rgba(0,0,0,.10);
+}
+
+.card h2{
+    font-size:20px;
+    margin-bottom:10px;
+    color:#0759c9;
+}
+
+.info{
+    background:#f1f6ff;
+    padding:12px;
+    border-radius:10px;
+    margin:12px 0;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.task-text{
+    background:#f8f8f8;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:13px;
+    margin:12px 0;
+    word-break:break-word;
+    line-height:1.6;
+}
+
+button{
+    width:100%;
+    border:0;
+    padding:13px;
+    border-radius:10px;
+    background:#0759c9;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.copy-btn{
+    background:#16a34a;
+}
+
+.captcha-box{
+    text-align:center;
+    margin:15px 0;
+}
+
+.captcha-number{
+    display:inline-block;
+    background:#222;
+    color:white;
+    font-size:30px;
+    font-weight:bold;
+    letter-spacing:8px;
+    padding:15px 22px;
+    border-radius:12px;
+    user-select:none;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:18px;
+    text-align:center;
+    margin-top:12px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#0759c9;
+}
+
+.message{
+    text-align:center;
+    font-weight:bold;
+    margin-top:12px;
+    min-height:22px;
+}
+
+.success{
+    color:#16a34a;
+}
+
+.error{
+    color:#dc2626;
+}
+
+.done{
+    background:#dcfce7;
+    color:#166534;
+    padding:13px;
+    border-radius:10px;
+    text-align:center;
+    font-weight:bold;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>💰 অনলাইন কাজ</h1>
+        <p>সহজে কাজ করুন এবং কাজ সম্পন্ন করুন</p>
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- কপি-পেস্ট কাজ -->
+    <!-- ========================= -->
+
+    <div class="card">
+
+        <h2>📋 কপি-পেস্ট কাজ</h2>
+
+        <div class="info">
+            নিচের লেখাটি কপি করে নির্দিষ্ট জায়গায় পেস্ট করুন।
+        </div>
+
+        <div class="task-text" id="copyText">
+            আমি অনলাইনে কাজ শিখছি এবং নিয়মিত কাজ করছি।
+        </div>
+
+        <button class="copy-btn" onclick="copyTask()">
+            📋 লেখা কপি করুন
+        </button>
+
+        <div id="copyMessage" class="message"></div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- নাম্বার CAPTCHA -->
+    <!-- ========================= -->
+
+    <div class="card">
+
+        <h2>🔢 নাম্বার CAPTCHA</h2>
+
+        <div class="info">
+            উপরের নাম্বারটি দেখে নিচের ঘরে একই নাম্বার লিখুন।
+        </div>
+
+        <div class="captcha-box">
+
+            <div class="captcha-number" id="captchaNumber">
+                12345
+            </div>
+
+        </div>
+
+        <input
+            type="number"
+            id="captchaInput"
+            placeholder="CAPTCHA নাম্বার লিখুন"
+        >
+
+        <button onclick="checkCaptcha()">
+            ✅ যাচাই করুন
+        </button>
+
+        <button onclick="newCaptcha()" style="background:#555;">
+            🔄 নতুন CAPTCHA
+        </button>
+
+        <div id="captchaMessage" class="message"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   কপি-পেস্ট কাজ
+========================= */
+
+function copyTask(){
+
+    const text = document.getElementById("copyText").innerText;
+
+    navigator.clipboard.writeText(text)
+    .then(function(){
+
+        document.getElementById("copyMessage").innerHTML =
+        "✅ লেখা সফলভাবে কপি হয়েছে!";
+
+        document.getElementById("copyMessage").className =
+        "message success";
+
+    })
+    .catch(function(){
+
+        document.getElementById("copyMessage").innerHTML =
+        "❌ কপি করা যায়নি। লেখাটি ধরে কপি করুন।";
+
+        document.getElementById("copyMessage").className =
+        "message error";
+
+    });
+
+}
+
+
+/* =========================
+   CAPTCHA
+========================= */
+
+let captchaAnswer = "";
+
+
+function newCaptcha(){
+
+    captchaAnswer =
+        Math.floor(10000 + Math.random() * 90000).toString();
+
+    document.getElementById("captchaNumber").innerText =
+        captchaAnswer;
+
+    document.getElementById("captchaInput").value = "";
+
+    document.getElementById("captchaMessage").innerHTML = "";
+
+}
+
+
+function checkCaptcha(){
+
+    const userAnswer =
+        document.getElementById("captchaInput").value.trim();
+
+    const message =
+        document.getElementById("captchaMessage");
+
+
+    if(userAnswer === ""){
+
+        message.innerHTML =
+        "⚠️ আগে CAPTCHA নাম্বার লিখুন।";
+
+        message.className =
+        "message error";
+
+        return;
+    }
+
+
+    if(userAnswer === captchaAnswer){
+
+        message.innerHTML =
+        "🎉 সঠিক! CAPTCHA সম্পন্ন হয়েছে।";
+
+        message.className =
+        "message success";
+
+    }else{
+
+        message.innerHTML =
+        "❌ ভুল নাম্বার! আবার চেষ্টা করুন।";
+
+        message.className =
+        "message error";
+
+    }
+
+}
+
+
+/* প্রথম CAPTCHA তৈরি */
+
+newCaptcha();
+
+</script>
+
+</body>
+  </html>
