@@ -1,1 +1,585 @@
- 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>অনলাইন কাজ</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#eef2f7;
+    padding:15px;
+}
+
+.container{
+    width:100%;
+    max-width:480px;
+    margin:auto;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#0759c9,#1688f5);
+    color:white;
+    padding:24px 15px;
+    border-radius:18px;
+    text-align:center;
+    margin-bottom:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:17px;
+}
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.card h2{
+    color:#0759c9;
+    font-size:25px;
+    margin-bottom:12px;
+}
+
+.card p{
+    color:#555;
+    font-size:18px;
+    line-height:1.6;
+    margin-bottom:16px;
+}
+
+/* TASK BOX */
+.task-box{
+    background:#f5f8fc;
+    padding:16px;
+    border-radius:15px;
+}
+
+/* COPY TEXT */
+.copy-area{
+    width:100%;
+    min-height:90px;
+    padding:14px;
+    background:white;
+    border:2px solid #cfd8e3;
+    border-radius:10px;
+    font-size:17px;
+    line-height:1.6;
+    resize:none;
+    outline:none;
+    margin-bottom:12px;
+}
+
+.copy-area:focus{
+    border-color:#0759c9;
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    padding:14px;
+    font-size:18px;
+    font-weight:bold;
+    color:white;
+    background:#0759c9;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.copy-btn{
+    background:#12a150;
+    margin-bottom:12px;
+}
+
+.submit-btn{
+    background:#0759c9;
+}
+
+/* PASTE */
+.paste-box{
+    width:100%;
+    height:58px;
+    padding:12px;
+    border:2px solid #cfd8e3;
+    border-radius:10px;
+    font-size:17px;
+    outline:none;
+    margin-bottom:12px;
+}
+
+.paste-box:focus{
+    border-color:#0759c9;
+}
+
+/* MESSAGE */
+.message{
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    border-radius:9px;
+    text-align:center;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.success{
+    display:block;
+    background:#d9f8e5;
+    color:#087a38;
+}
+
+.error{
+    display:block;
+    background:#ffe0e0;
+    color:#c62828;
+}
+
+/* CAPTCHA */
+.captcha-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.captcha-code{
+    flex:1;
+    min-height:62px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e9eef5;
+    border:3px dashed #0759c9;
+    border-radius:12px;
+    font-size:27px;
+    font-weight:bold;
+    letter-spacing:6px;
+    color:#111;
+    user-select:none;
+}
+
+.refresh-btn{
+    width:70px;
+    height:62px;
+    padding:5px;
+    background:#f39c12;
+    font-size:25px;
+}
+
+.captcha-input{
+    width:100%;
+    height:58px;
+    padding:12px;
+    border:2px solid #cfd8e3;
+    border-radius:10px;
+    font-size:18px;
+    outline:none;
+    margin-bottom:12px;
+}
+
+.captcha-input:focus{
+    border-color:#0759c9;
+}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    color:#777;
+    font-size:15px;
+    padding:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>💰 অনলাইন কাজ</h1>
+        <p>সহজে কাজ করুন — কাজ সম্পন্ন করুন</p>
+    </div>
+
+
+    <!-- =========================
+         COPY PASTE
+    ========================== -->
+
+    <div class="card">
+
+        <h2>📋 কপি-পেস্ট কাজ</h2>
+
+        <p>
+            নিচের লেখাটি কপি করুন। তারপর নিচের বক্সে পেস্ট করে কাজ জমা দিন।
+        </p>
+
+        <div class="task-box">
+
+            <!-- কপি করার লেখা -->
+            <textarea
+                id="copyText"
+                class="copy-area"
+                readonly
+            >এই লেখাটি কপি করে নিচের বক্সে পেস্ট করুন</textarea>
+
+
+            <!-- COPY BUTTON -->
+            <button
+                type="button"
+                class="copy-btn"
+                onclick="copyTaskText()"
+            >
+                📋 লেখা কপি করুন
+            </button>
+
+
+            <!-- PASTE BOX -->
+            <input
+                type="text"
+                id="pasteBox"
+                class="paste-box"
+                placeholder="এখানে পেস্ট করুন"
+                autocomplete="off"
+            >
+
+
+            <!-- SUBMIT -->
+            <button
+                type="button"
+                class="submit-btn"
+                onclick="checkCopyPaste()"
+            >
+                ✅ কাজ জমা দিন
+            </button>
+
+
+            <div
+                id="copyMessage"
+                class="message">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CAPTCHA
+    ========================== -->
+
+    <div class="card">
+
+        <h2>🔐 CAPTCHA কাজ</h2>
+
+        <p>
+            উপরের CAPTCHA কোডটি দেখে নিচের ঘরে লিখুন।
+        </p>
+
+        <div class="task-box">
+
+            <div class="captcha-row">
+
+                <div
+                    id="captchaCode"
+                    class="captcha-code">
+                </div>
+
+                <button
+                    type="button"
+                    class="refresh-btn"
+                    onclick="generateCaptcha()">
+                    🔄
+                </button>
+
+            </div>
+
+
+            <input
+                type="text"
+                id="captchaInput"
+                class="captcha-input"
+                placeholder="CAPTCHA কোড লিখুন"
+                autocomplete="off"
+            >
+
+
+            <button
+                type="button"
+                onclick="checkCaptcha()">
+                ✅ CAPTCHA জমা দিন
+            </button>
+
+
+            <div
+                id="captchaMessage"
+                class="message">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        © 2026 অনলাইন কাজ
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   COPY TEXT
+===================================== */
+
+function copyTaskText(){
+
+    const box = document.getElementById("copyText");
+    const text = box.value.trim();
+    const message = document.getElementById("copyMessage");
+
+    /*
+       প্রথমে Clipboard API চেষ্টা করবে
+    */
+
+    if(navigator.clipboard){
+
+        navigator.clipboard.writeText(text)
+        .then(function(){
+
+            message.className = "message success";
+            message.innerText =
+                "✅ লেখা কপি হয়েছে। এখন নিচের বক্সে পেস্ট করুন।";
+
+        })
+        .catch(function(){
+
+            manualCopy(text);
+
+        });
+
+    }else{
+
+        manualCopy(text);
+
+    }
+
+}
+
+
+/* =====================================
+   BACKUP COPY
+===================================== */
+
+function manualCopy(text){
+
+    const box = document.getElementById("copyText");
+    const message = document.getElementById("copyMessage");
+
+    box.removeAttribute("readonly");
+
+    box.focus();
+    box.select();
+    box.setSelectionRange(0, box.value.length);
+
+    let copied = false;
+
+    try{
+        copied = document.execCommand("copy");
+    }catch(e){
+        copied = false;
+    }
+
+    box.setAttribute("readonly","readonly");
+
+    if(copied){
+
+        message.className = "message success";
+        message.innerText =
+            "✅ লেখা কপি হয়েছে। এখন নিচের বক্সে পেস্ট করুন।";
+
+    }else{
+
+        message.className = "message error";
+        message.innerText =
+            "⚠️ অটো কপি হয়নি। লেখার ওপর চেপে ধরে Copy করুন।";
+
+    }
+
+}
+
+
+/* =====================================
+   CHECK COPY PASTE
+===================================== */
+
+function checkCopyPaste(){
+
+    const original =
+        document.getElementById("copyText")
+        .value
+        .trim();
+
+    const entered =
+        document.getElementById("pasteBox")
+        .value
+        .trim();
+
+    const message =
+        document.getElementById("copyMessage");
+
+
+    if(entered === ""){
+
+        message.className = "message error";
+
+        message.innerText =
+            "❌ আগে লেখাটি নিচের বক্সে পেস্ট করুন।";
+
+        return;
+    }
+
+
+    if(entered === original){
+
+        message.className = "message success";
+
+        message.innerText =
+            "🎉 সফল! কপি-পেস্ট কাজ সম্পন্ন হয়েছে।";
+
+    }else{
+
+        message.className = "message error";
+
+        message.innerText =
+            "❌ লেখা সঠিক নয়। আবার কপি করে পেস্ট করুন।";
+
+    }
+
+}
+
+
+/* =====================================
+   CAPTCHA
+===================================== */
+
+let currentCaptcha = "";
+
+
+function generateCaptcha(){
+
+    const characters =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let code = "";
+
+    for(let i = 0; i < 5; i++){
+
+        const random =
+            Math.floor(
+                Math.random() * characters.length
+            );
+
+        code += characters.charAt(random);
+
+    }
+
+    currentCaptcha = code;
+
+    document.getElementById("captchaCode")
+        .innerText = currentCaptcha;
+
+    document.getElementById("captchaInput")
+        .value = "";
+
+    document.getElementById("captchaMessage")
+        .className = "message";
+
+}
+
+
+/* =====================================
+   CHECK CAPTCHA
+===================================== */
+
+function checkCaptcha(){
+
+    const entered =
+        document.getElementById("captchaInput")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const message =
+        document.getElementById("captchaMessage");
+
+
+    if(entered === ""){
+
+        message.className = "message error";
+
+        message.innerText =
+            "❌ CAPTCHA কোড লিখুন।";
+
+        return;
+    }
+
+
+    if(entered === currentCaptcha){
+
+        message.className = "message success";
+
+        message.innerText =
+            "🎉 CAPTCHA সঠিক! কাজ সম্পন্ন হয়েছে।";
+
+        setTimeout(function(){
+
+            generateCaptcha();
+
+        },1500);
+
+    }else{
+
+        message.className = "message error";
+
+        message.innerText =
+            "❌ CAPTCHA ভুল হয়েছে। আবার চেষ্টা করুন।";
+
+    }
+
+}
+
+
+/* প্রথম CAPTCHA */
+generateCaptcha();
+
+</script>
+
+</body>
+             </html> 
